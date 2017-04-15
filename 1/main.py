@@ -51,4 +51,17 @@ def computeNearesNaightbour(username, users):
     distances.sort()
     return distances
 
-print(computeNearesNaightbour("Hailey",users))
+#print(computeNearesNaightbour("Hailey",users))
+
+def recomend(username, users):
+    nearest = computeNearesNaightbour(username, users)[0][1]
+    recomendiatons = []
+    neighborRatings = users[nearest]
+    userRatings = users[username]
+    for artist in neighborRatings:
+        if not artist in userRatings:
+            recomendiatons.append((artist, neighborRatings[artist]))
+    return sorted(recomendiatons,
+                  key=lambda artistTuple: artistTuple[1], reverse= True)
+
+print(recomend("Angelica",users))
