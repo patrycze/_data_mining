@@ -1,39 +1,54 @@
-import numpy as np
-from collections import defaultdict
+users = {
+ "Angelica": {"Blues Traveler": 3.5, "Broken Bells": 2.0,
+ "Norah Jones": 4.5, "Phoenix": 5.0,
+ "Slightly Stoopid": 1.5,
+ "The Strokes": 2.5, "Vampire Weekend": 2.0},
 
-dataset_filename = "data/affinity_dataset.txt"
-X = np.loadtxt(dataset_filename)
-print(X[:5])
-num_apple_purchases = 0
-for sample in X:
-    if sample[3] == 1:
-        num_apple_purchases += 1
-print("{0} people bought Apples" .format(num_apple_purchases))
+ "Bill": {"Blues Traveler": 2.0, "Broken Bells": 3.5,
+ "Deadmau5": 4.0, "Phoenix": 2.0,
+ "Slightly Stoopid": 3.5, "Vampire Weekend": 3.0},
 
-n_features = 4
+ "Chan": {"Blues Traveler": 5.0, "Broken Bells": 1.0,
+ "Deadmau5": 1.0, "Norah Jones": 3.0,
+ "Phoenix": 5, "Slightly Stoopid": 1.0},
 
-valid_rules = defaultdict(int)
-invalid_rules = defaultdict(int)
-num_occurances = defaultdict(int)
-for sample in X:
-    for premise in range(4):
-        if sample[premise] == 0: continue
-        num_occurances[premise] += 1
-for conclusion in range(n_features):
-    if premise == conclusion: continue
-    if sample[conclusion] == 1:
-        valid_rules[(premise, conclusion)] += 1
-    else:
-        invalid_rules[(premise, conclusion)] += 1
-support = valid_rules
-confidence = defaultdict(float)
-for premise, conclusion in valid_rules.keys():
-    rule = (premise, conclusion)
-    confidence[rule] = valid_rules[rule] / num_occurances[premise]
+ "Dan": {"Blues Traveler": 3.0, "Broken Bells": 4.0,
+ "Deadmau5": 4.5, "Phoenix": 3.0,
+ "Slightly Stoopid": 4.5, "The Strokes": 4.0,
+ "Vampire Weekend": 2.0},
 
-def print_rule(premise, conclusion,support, confidence, features):
-    premise_name = features[premise]
-    conclusion_name = features[conclusion]
-    print("Rule: If a person buys {0} they will also buy {1}".format(premise_name, conclusion_name))
-    print(" - Support: {0}".format(support[(premise, conclusion)]))
-    print(" - Confidence: {0:.3f}".format(confidence[(premise, conclusion)]))
+ "Hailey": {"Broken Bells": 4.0, "Deadmau5": 1.0,
+ "Norah Jones": 4.0, "The Strokes": 4.0,
+ "Vampire Weekend": 1.0},
+
+ "Jordyn": {"Broken Bells": 4.5, "Deadmau5": 4.0, "Norah Jones": 5.0,
+ "Phoenix": 5.0, "Slightly Stoopid": 4.5,
+ "The Strokes": 4.0, "Vampire Weekend": 4.0},
+
+ "Sam": {"Blues Traveler": 5.0, "Broken Bells": 2.0,
+ "Norah Jones": 3.0, "Phoenix": 5.0,
+ "Slightly Stoopid": 4.0, "The Strokes": 5.0},
+
+ "Veronica": {"Blues Traveler": 3.0, "Norah Jones": 5.0,
+ "Phoenix": 4.0, "Slightly Stoopid": 2.5,
+ "The Strokes": 3.0}}
+
+def manhattan(rating1, rating2):
+    distance = 0
+    for key in rating1:
+        if key in rating2:
+            distance += abs(rating1[key] - rating2[key])
+    return distance
+
+#print(manhattan(users['Hailey'], users['Veronica']))
+
+def computeNearesNaightbour(username, users):
+    distances = []
+    for user in users:
+        if user != username:
+            distance = manhattan(users[user],users[username])
+            distances.append((distance,user))
+    distances.sort()
+    return distances
+
+print(computeNearesNaightbour("Hailey",users))
