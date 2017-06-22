@@ -1,0 +1,7 @@
+{
+    "scipts: { 
+    "start": "node server.js"
+    },
+    "name": "api_test",
+    "version": "0.0.1"
+}
